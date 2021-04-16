@@ -5,8 +5,18 @@ def usage():
     print(f"""
 Usage: {argv[0]} [g | t]
 g : play with the GUI
-t : play with the Terminal""")
+t : play with the Terminal \n""")
     quit()
 
 if __name__ == "__main__":
-    print("tictactoe program now running....")
+    if len(argv) != 2:
+        usage()
+    elif argv[1] == "t":
+        ui = Terminal()
+    elif argv[1] == "g":
+        ui = Gui()
+    else:
+        usage()
+    
+    # polymorphism, epic.
+    ui.run()
