@@ -1,2 +1,2 @@
-# tictactoe20201
+# tictactoe2021
 Example CS Coursework, 2021
