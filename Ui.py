@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from Game import Game
 
 class Ui(ABC):
 
@@ -24,4 +25,4 @@ class Terminal(Ui):
             row = int(input("Enter row: "))
             col = int(input("Enter column: "))
             self.__game.play(row, col)
-            
+        print("grats")
