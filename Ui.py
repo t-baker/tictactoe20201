@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+print("bru")
 class Ui(ABC):
 
     @abstractmethod
