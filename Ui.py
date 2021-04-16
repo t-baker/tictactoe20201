@@ -15,7 +15,13 @@ class Gui(Ui):
 
 class Terminal(Ui):
     def __init__(self):
+        self.__game = Game()
         pass
 
     def run(self):
-        print("Running Terminal")
+        while not self.__game.winner:
+            print(self.__game)
+            row = int(input("Enter row: "))
+            col = int(input("Enter column: "))
+            self.__game.play(row, col)
+            
