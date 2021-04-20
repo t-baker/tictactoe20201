@@ -17,7 +17,7 @@ class Game:
             if row != Game._DIM - 1:
                 dashes = "-" * (2 * Game._DIM - 1)
                 result += f"\n  {dashes}"
-        result += f"\n\n{self._player} turn to play"
+        result += f"\n\n{self._player}'s turn to play"
         return result
 
     def play(self,row,col):
