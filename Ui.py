@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from Game import Game, GameError
-from tkinter import Button, Tk, Frame, X
+from tkinter import Button, Tk, Frame, X, Toplevel, StringVar
+from itertools import product
+
 
 class Ui(ABC):
 
@@ -19,7 +21,7 @@ class Gui(Ui):
             frame,
             text = 'Show Help',
             command = self._help_callback).pack(fill=X)
-        
+        # note no double brackets after callback command, spaces to make it look nice
         Button(
             frame,
             text = 'Play',
@@ -37,11 +39,35 @@ class Gui(Ui):
         pass
 
     def _play_callback(self):
-        pass
+        self.__game = Game()
+        #game win as in game window
+        game_win = Toplevel(self.__root)
+        game_win.title("Game")
+        frame = Frame(game_win)
+        frame.grid(row=0,column=0)
+        
+        Button(game_win, text='Dismiss', command=game_win.destroy).grid(row=1,column=0)
+        
+        #note this means only one window at a time, itll overwrite any other one
+        self.__buttons = [[None] *3 for _ in range(3)]
+        for row, col in product(range(3), range(3)):
+            b = StringVar()
+            b.set(self.__game.at(row+1,col+1))
+            
+            cmd = lambda r=row, c=col: self.__play_and_refresh(r,c)
+            
+            Button(frame, textvariable=b,command=cmd).grid(row=row,column=col)
+            self.__buttons[row][col] = b
+            
+    def __play_and_refresh(self, row, col):
+        self.__game.play(row+1,col+1)
+        #refresh
+        for row, col in product(range(3), range(3)):
+            text = self.__game.at(row+1,col+1)
+            self.__buttons[row][col].set(text)
     
     def _quit_callback(self):
         self.__root.quit()
-    
     
     def run(self):
         print("Running Gui")

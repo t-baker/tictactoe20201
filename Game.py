@@ -33,6 +33,11 @@ class Game:
         self._board[row][col] = self._player
         self._player = Game.P2 if self._player is Game.P1 else Game.P1
     
+    def at(self, r,c):
+        r -=1
+        c -=1
+        return self._board[r][c]
+        
     @property
     def winner(self):
         for p in [Game.P1,Game.P2]:
