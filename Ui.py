@@ -42,23 +42,33 @@ class Gui(Ui):
         
         self.__root = root
         self.__console = console
+        self.__game_in_progress = False
         
     def _help_callback(self):
         pass
+    
+    def _dismiss_game(self):
+        self.__game_in_progress = False
+        self.__game_win.destroy()
 
     def _play_callback(self):
+        if self.__game_in_progress:
+            return
+        self.__game_in_progress = True
+        self.__finished = False
         self.__game = Game()
         #game win as in game window
         game_win = Toplevel(self.__root)
         game_win.title("Game")
         frame = Frame(game_win)
+        self.__game_win = game_win
         
         #Resizing
         Grid.columnconfigure(game_win, 0, weight=1)
         Grid.rowconfigure(game_win,0,weight=1)
         frame.grid(row=0,column=0, sticky=N+S+W+E)
         
-        Button(game_win, text='Dismiss', command=game_win.destroy).grid(row=1,column=0,sticky=N+S+W+E)
+        Button(game_win, text='Dismiss', command=self._dismiss_game).grid(row=1,column=0,sticky=N+S+W+E)
         
         #note this means only one window at a time, any other one's control will be whack
         self.__buttons = [[None] *3 for _ in range(3)]
@@ -77,6 +87,9 @@ class Gui(Ui):
             Grid.rowconfigure(frame,i,weight=1)
             
     def __play_and_refresh(self, row, col):
+        if self.__finished:
+            return
+        
         try:
             self.__game.play(row+1,col+1)
         except GameError as e:
@@ -89,6 +102,7 @@ class Gui(Ui):
     
         w = self.__game.winner
         if w is not None:
+            self.__finished = True
             if w is Game._DRAW:
                 self.__console.insert(END, "The game has been drawn!\n")
             else:
