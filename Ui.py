@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from Game import Game, GameError
-from tkinter import Button, Tk, Frame, X, Toplevel, StringVar, Text, Scrollbar, Y, LEFT, RIGHT, END, Grid, N, S, W, E
+from tkinter import Button, Tk, Frame, X, Toplevel, StringVar, Text, Scrollbar, Y, LEFT, RIGHT, END, Grid, N, S, W, E, Message
 from itertools import product
 
 
@@ -43,9 +43,31 @@ class Gui(Ui):
         self.__root = root
         self.__console = console
         self.__game_in_progress = False
+        self.__help_open = False
         
     def _help_callback(self):
-        pass
+        if self.__help_open:
+            return
+        self.__help_open = True
+        help_win = Toplevel(self.__root)  
+        help_text = """Welcome To Tic Tac Toe!
+The rules are:
+    - Each player takes turns in placing their respective marker on the grid.
+    - When a player lines up three of their markers vertically, horizontally, or diagonally, they win the game.
+    - If no player is able to get 3 in a row, the game is drawn.
+
+Good Luck! May the Tic Tac Toe gods smile upon you..."""
+        
+        self.__help_win = help_win
+        Message(help_win, text=help_text).pack(fill=X)
+        
+        Button(help_win,
+              text="Dismiss",
+              command=self._dismiss_help).pack(fill=X)
+        
+    def _dismiss_help(self):
+        self.__help_open = False
+        self.__help_win.destroy()
     
     def _dismiss_game(self):
         self.__game_in_progress = False
